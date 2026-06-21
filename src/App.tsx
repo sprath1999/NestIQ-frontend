@@ -11,6 +11,7 @@ import { useAppSelector } from "./store/hook";
 import type { JSX } from "react/jsx-runtime";
 import Login from "./features/auth/pages/login";
 import Register from "./features/auth/pages/register";
+import ResidentComplaints from "./features/complaints/pages/ResidentComplaints";
 
 function ProtectedRoute({
   children,
@@ -60,6 +61,7 @@ function App() {
         >
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<ResidentDashboard />} />
+          <Route path="complaints" element={<ResidentComplaints />} />
         </Route>
 
         {/* Guard routes */}

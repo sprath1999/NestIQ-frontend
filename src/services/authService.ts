@@ -1,4 +1,6 @@
-import axiosInstance from "./axiosInstance";
+import axios from "axios";
+
+const AUTH_BASE_URL = "http://localhost:8081";
 
 export interface LoginPayload {
   email: string;
@@ -16,22 +18,25 @@ export interface RegisterPayload {
 
 export const authService = {
   login: async (payload: LoginPayload) => {
-    const response = await axiosInstance.post("/auth/login", payload);
+    const response = await axios.post(`${AUTH_BASE_URL}/auth/login`, payload);
     return response.data;
   },
 
   register: async (payload: RegisterPayload) => {
-    const response = await axiosInstance.post("/auth/register", payload);
+    const response = await axios.post(
+      `${AUTH_BASE_URL}/auth/register`,
+      payload,
+    );
     return response.data;
   },
 
   logout: async () => {
-    const response = await axiosInstance.post("/auth/logout");
+    const response = await axios.post(`${AUTH_BASE_URL}/auth/logout`);
     return response.data;
   },
 
   refreshToken: async () => {
-    const response = await axiosInstance.post("/auth/refresh-token");
+    const response = await axios.post(`${AUTH_BASE_URL}/auth/refresh-token`);
     return response.data;
   },
 };
