@@ -12,6 +12,7 @@ import type { JSX } from "react/jsx-runtime";
 import Login from "./features/auth/pages/login";
 import Register from "./features/auth/pages/register";
 import ResidentComplaints from "./features/complaints/pages/ResidentComplaints";
+import AdminComplaints from "./features/complaints/pages/AdminComplaints";
 
 function ProtectedRoute({
   children,
@@ -48,6 +49,7 @@ function App() {
         >
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="complaints" element={<AdminComplaints />} />
         </Route>
 
         {/* Resident routes */}
