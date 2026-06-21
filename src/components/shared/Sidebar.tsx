@@ -5,6 +5,8 @@ import { useAppDispatch } from "../../store/hook";
 
 interface SidebarProps {
   role?: string;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 const adminLinks = [
@@ -36,7 +38,7 @@ const guardLinks = [
   { path: "/guard/approved", label: "Pre-approved", icon: "✅" },
 ];
 
-function Sidebar({ role }: SidebarProps) {
+function Sidebar({ role, isOpen }: SidebarProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -53,7 +55,7 @@ function Sidebar({ role }: SidebarProps) {
   };
 
   return (
-    <aside className={styles.sidebar}>
+    <aside className={`${styles.sidebar} ${isOpen ? styles.sidebarOpen : ""}`}>
       <div className={styles.logo}>
         <h1>NestIQ</h1>
         <span className={styles.role}>{role}</span>

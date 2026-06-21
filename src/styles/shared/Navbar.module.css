@@ -88,6 +88,26 @@
   font-size: var(--text-xs);
   color: var(--text-secondary);
 }
+.menuBtn {
+  display: none;
+  background: none;
+  font-size: var(--text-xl);
+  color: var(--text-primary);
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
+}
+
+.menuBtn:hover {
+  background-color: var(--background);
+}
+
+@media (max-width: 768px) {
+  .menuBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
 
 @media (max-width: 768px) {
   .greeting {

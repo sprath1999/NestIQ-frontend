@@ -7,12 +7,16 @@ interface NavbarProps {
     role: string;
     flatNumber?: string;
   } | null;
+  onMenuToggle?: () => void;
 }
 
-function Navbar({ user }: NavbarProps) {
+function Navbar({ user, onMenuToggle }: NavbarProps) {
   return (
     <header className={styles.navbar}>
       <div className={styles.left}>
+        <button className={styles.menuBtn} onClick={onMenuToggle}>
+          ☰
+        </button>
         <h2 className={styles.greeting}>
           Welcome back, {user?.name?.split(" ")[0]} 👋
         </h2>

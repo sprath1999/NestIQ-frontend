@@ -10,12 +10,26 @@
   flex-direction: column;
   margin-left: var(--sidebar-width);
   transition: margin-left 0.3s ease;
+  min-width: 0;
 }
 
 .content {
   flex: 1;
   padding: var(--spacing-xl);
   overflow-y: auto;
+}
+.overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 199;
+  }
 }
 
 @media (max-width: 768px) {
