@@ -4,7 +4,7 @@ import { z } from "zod";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { authService } from "../../../services/authService";
-import styles from "../../../styles/regidster.module.css";
+import styles from "../../../styles/register.module.css";
 
 const registerSchema = z
   .object({
