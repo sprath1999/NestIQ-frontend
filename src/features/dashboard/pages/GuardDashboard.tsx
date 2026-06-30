@@ -1,5 +1,6 @@
 import { useAppSelector } from "../../../store/hook";
 import styles from "../../../styles/dashboard/GuardDashboard.module.css";
+import { useNavigate } from "react-router-dom";
 
 const stats = [
   {
@@ -53,9 +54,11 @@ const preApproved = [
 
 function GuardDashboard() {
   const { user } = useAppSelector((state) => state.auth);
-  console.log(user);
+  const navigate = useNavigate();
 
   const handleEmergency = () => {
+    console.log(user);
+
     if (window.confirm("Send emergency alert to ALL residents?")) {
       alert("Emergency alert sent to all residents!");
     }
@@ -91,7 +94,12 @@ function GuardDashboard() {
         <div className={styles.card}>
           <div className={styles.cardHeader}>
             <h3 className={styles.cardTitle}>Recent Visitors</h3>
-            <button className={styles.logBtn}>+ Log Visitor</button>
+            <button
+              className={styles.logBtn}
+              onClick={() => navigate("/guard/visitors")}
+            >
+              + Log Visitor
+            </button>
           </div>
           <div className={styles.visitorList}>
             {recentVisitors.map((item, index) => (
@@ -116,7 +124,12 @@ function GuardDashboard() {
         <div className={styles.card}>
           <div className={styles.cardHeader}>
             <h3 className={styles.cardTitle}>Parcels Logged</h3>
-            <button className={styles.logBtn}>+ Log Parcel</button>
+            <button
+              className={styles.logBtn}
+              onClick={() => navigate("/guard/visitors")}
+            >
+              + Log Parcel
+            </button>
           </div>
           <div className={styles.parcelList}>
             {recentParcels.map((item, index) => (
@@ -148,7 +161,12 @@ function GuardDashboard() {
                   {item.flat} · {item.time}
                 </span>
               </div>
-              <button className={styles.allowBtn}>Allow Entry</button>
+              <button
+                className={styles.allowBtn}
+                onClick={() => navigate("/guard/visitors")}
+              >
+                Allow Entry
+              </button>
             </div>
           ))}
         </div>

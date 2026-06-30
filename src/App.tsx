@@ -15,6 +15,8 @@ import ResidentComplaints from "./features/complaints/pages/ResidentComplaints";
 import AdminComplaints from "./features/complaints/pages/AdminComplaints";
 import ResidentAmenities from "./features/amenities/pages/ResidentAmenities";
 import NoticeBoard from "./features/notices/pages/NoticeBoard";
+import ResidentVisitors from "./features/visitors/pages/ResidentVisitors";
+import GuardVisitors from "./features/visitors/pages/GuardVisitors";
 
 function ProtectedRoute({
   children,
@@ -69,6 +71,7 @@ function App() {
           <Route path="amenities" element={<ResidentAmenities />} />
           <Route path="complaints" element={<ResidentComplaints />} />
           <Route path="notices" element={<NoticeBoard />} />
+          <Route path="visitors" element={<ResidentVisitors />} />
         </Route>
 
         {/* Guard routes */}
@@ -82,6 +85,7 @@ function App() {
         >
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<GuardDashboard />} />
+          <Route path="visitors" element={<GuardVisitors />} />
         </Route>
       </Routes>
     </BrowserRouter>
