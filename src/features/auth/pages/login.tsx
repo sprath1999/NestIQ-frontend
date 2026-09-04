@@ -70,7 +70,7 @@ function Login() {
             <input
               {...register("email")}
               type="email"
-              placeholder="you@example.com"
+              placeholder="Enter your email Id"
               className={`${styles.input} ${errors.email ? styles.inputError : ""}`}
             />
             {errors.email && (
