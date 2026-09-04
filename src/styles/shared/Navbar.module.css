@@ -30,6 +30,10 @@
   gap: var(--spacing-lg);
 }
 
+.notificationWrapper {
+  position: relative;
+}
+
 .notificationBtn {
   position: relative;
   font-size: var(--text-xl);
@@ -51,6 +55,93 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.notificationDropdown {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  width: 320px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+  z-index: 1000;
+  max-height: 400px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.notificationHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--border);
+}
+
+.notificationTitle {
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.markAllRead {
+  font-size: var(--text-xs);
+  color: var(--primary);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.markAllRead:hover {
+  text-decoration: underline;
+}
+
+.notificationList {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.notificationItem {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.notificationItem:hover {
+  background-color: var(--background);
+}
+
+.unread {
+  background-color: var(--primary-light);
+  border-left: 3px solid var(--primary);
+}
+
+.notificationText {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.notificationMessage {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.notificationTime {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.noNotifications {
+  padding: var(--spacing-xl);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
 }
 
 .profile {
@@ -88,6 +179,7 @@
   font-size: var(--text-xs);
   color: var(--text-secondary);
 }
+
 .menuBtn {
   display: none;
   background: none;
@@ -107,14 +199,24 @@
     align-items: center;
     justify-content: center;
   }
-}
 
-@media (max-width: 768px) {
   .greeting {
     font-size: var(--text-md);
   }
 
   .info {
     display: none;
+  }
+
+  .notificationDropdown {
+    width: 280px;
+    right: -60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .notificationDropdown {
+    width: 260px;
+    right: -80px;
   }
 }

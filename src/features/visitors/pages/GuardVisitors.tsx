@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { visitorService } from "../../../services/visitorService";
-// import styles from "../../../styles/visitors/Visitors.module.css";
+import { flatService } from "../../../services/flatService";
 import styles from "../../../styles/visitors/Visitors.module.css";
 
 function GuardVisitors() {
@@ -10,20 +10,74 @@ function GuardVisitors() {
   >("visitors");
   const [showVisitorModal, setShowVisitorModal] = useState(false);
   const [showParcelModal, setShowParcelModal] = useState(false);
+  const [flatLookupLoading, setFlatLookupLoading] = useState(false);
+  const [flatLookupError, setFlatLookupError] = useState("");
   const [visitorForm, setVisitorForm] = useState({
     visitorName: "",
     visitorPhone: "",
     purpose: "",
     flatNumber: "",
     residentName: "",
+    residentId: null as number | null,
   });
   const [parcelForm, setParcelForm] = useState({
     flatNumber: "",
     residentName: "",
     sender: "",
     description: "",
+    residentId: null as number | null,
   });
   const queryClient = useQueryClient();
+
+  // Auto-fetch resident when flat number is entered
+  const handleFlatNumberChange = async (
+    flatNumber: string,
+    formType: "visitor" | "parcel",
+  ) => {
+    if (formType === "visitor") {
+      setVisitorForm({
+        ...visitorForm,
+        flatNumber,
+        residentName: "",
+        residentId: null,
+      });
+    } else {
+      setParcelForm({
+        ...parcelForm,
+        flatNumber,
+        residentName: "",
+        residentId: null,
+      });
+    }
+
+    if (flatNumber.length < 3) return;
+
+    setFlatLookupLoading(true);
+    setFlatLookupError("");
+
+    try {
+      const flat = await flatService.lookupFlat(flatNumber);
+      if (formType === "visitor") {
+        setVisitorForm((prev) => ({
+          ...prev,
+          flatNumber,
+          residentName: flat.residentName || "",
+          residentId: flat.residentId || null,
+        }));
+      } else {
+        setParcelForm((prev) => ({
+          ...prev,
+          flatNumber,
+          residentName: flat.residentName || "",
+          residentId: flat.residentId || null,
+        }));
+      }
+    } catch (e) {
+      setFlatLookupError("Flat not found");
+    } finally {
+      setFlatLookupLoading(false);
+    }
+  };
 
   const { data: visitors, isLoading: loadingVisitors } = useQuery({
     queryKey: ["allVisitors"],
@@ -51,7 +105,9 @@ function GuardVisitors() {
         purpose: "",
         flatNumber: "",
         residentName: "",
+        residentId: null,
       });
+      setFlatLookupError("");
     },
   });
 
@@ -72,7 +128,9 @@ function GuardVisitors() {
         residentName: "",
         sender: "",
         description: "",
+        residentId: null,
       });
+      setFlatLookupError("");
     },
   });
 
@@ -244,6 +302,7 @@ function GuardVisitors() {
           </div>
         ))}
 
+      {/* Visitor Modal */}
       {showVisitorModal && (
         <div
           className={styles.modalOverlay}
@@ -293,25 +352,32 @@ function GuardVisitors() {
                 <input
                   className={styles.input}
                   value={visitorForm.flatNumber}
+                  placeholder="e.g. A-101"
                   onChange={(e) =>
-                    setVisitorForm({
-                      ...visitorForm,
-                      flatNumber: e.target.value,
-                    })
+                    handleFlatNumberChange(e.target.value, "visitor")
                   }
                 />
+                {flatLookupLoading && (
+                  <span
+                    style={{ fontSize: "12px", color: "var(--text-muted)" }}
+                  >
+                    Looking up flat...
+                  </span>
+                )}
+                {flatLookupError && (
+                  <span style={{ fontSize: "12px", color: "var(--danger)" }}>
+                    {flatLookupError}
+                  </span>
+                )}
               </div>
               <div className={styles.fieldGroup}>
                 <label className={styles.label}>Resident Name</label>
                 <input
                   className={styles.input}
                   value={visitorForm.residentName}
-                  onChange={(e) =>
-                    setVisitorForm({
-                      ...visitorForm,
-                      residentName: e.target.value,
-                    })
-                  }
+                  readOnly
+                  style={{ backgroundColor: "var(--background)" }}
+                  placeholder="Auto-filled from flat lookup"
                 />
               </div>
               <div className={styles.modalButtons}>
@@ -323,8 +389,13 @@ function GuardVisitors() {
                 </button>
                 <button
                   className={styles.submitBtn}
-                  onClick={() => logEntry(visitorForm)}
-                  disabled={loggingEntry}
+                  onClick={() =>
+                    logEntry({
+                      ...visitorForm,
+                      residentId: visitorForm.residentId,
+                    })
+                  }
+                  disabled={loggingEntry || !visitorForm.residentId}
                 >
                   {loggingEntry ? "Logging..." : "Log Entry"}
                 </button>
@@ -334,6 +405,7 @@ function GuardVisitors() {
         </div>
       )}
 
+      {/* Parcel Modal */}
       {showParcelModal && (
         <div
           className={styles.modalOverlay}
@@ -347,22 +419,32 @@ function GuardVisitors() {
                 <input
                   className={styles.input}
                   value={parcelForm.flatNumber}
+                  placeholder="e.g. A-101"
                   onChange={(e) =>
-                    setParcelForm({ ...parcelForm, flatNumber: e.target.value })
+                    handleFlatNumberChange(e.target.value, "parcel")
                   }
                 />
+                {flatLookupLoading && (
+                  <span
+                    style={{ fontSize: "12px", color: "var(--text-muted)" }}
+                  >
+                    Looking up flat...
+                  </span>
+                )}
+                {flatLookupError && (
+                  <span style={{ fontSize: "12px", color: "var(--danger)" }}>
+                    {flatLookupError}
+                  </span>
+                )}
               </div>
               <div className={styles.fieldGroup}>
                 <label className={styles.label}>Resident Name</label>
                 <input
                   className={styles.input}
                   value={parcelForm.residentName}
-                  onChange={(e) =>
-                    setParcelForm({
-                      ...parcelForm,
-                      residentName: e.target.value,
-                    })
-                  }
+                  readOnly
+                  style={{ backgroundColor: "var(--background)" }}
+                  placeholder="Auto-filled from flat lookup"
                 />
               </div>
               <div className={styles.fieldGroup}>
@@ -399,8 +481,13 @@ function GuardVisitors() {
                 </button>
                 <button
                   className={styles.submitBtn}
-                  onClick={() => logParcel(parcelForm)}
-                  disabled={loggingParcel}
+                  onClick={() =>
+                    logParcel({
+                      ...parcelForm,
+                      residentId: parcelForm.residentId,
+                    })
+                  }
+                  disabled={loggingParcel || !parcelForm.residentId}
                 >
                   {loggingParcel ? "Logging..." : "Log Parcel"}
                 </button>
