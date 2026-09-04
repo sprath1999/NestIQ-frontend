@@ -55,6 +55,7 @@ function App() {
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="complaints" element={<AdminComplaints />} />
           <Route path="notices" element={<NoticeBoard />} />
+          <Route path="visitors" element={<GuardVisitors />} />
         </Route>
 
         {/* Resident routes */}
@@ -72,6 +73,7 @@ function App() {
           <Route path="complaints" element={<ResidentComplaints />} />
           <Route path="notices" element={<NoticeBoard />} />
           <Route path="visitors" element={<ResidentVisitors />} />
+          <Route path="parcels" element={<ResidentVisitors />} />
         </Route>
 
         {/* Guard routes */}
@@ -86,6 +88,8 @@ function App() {
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<GuardDashboard />} />
           <Route path="visitors" element={<GuardVisitors />} />
+          <Route path="parcels" element={<GuardVisitors />} />
+          <Route path="approved" element={<GuardVisitors />} />
         </Route>
       </Routes>
     </BrowserRouter>
